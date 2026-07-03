@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Filter, History } from "lucide-react";
+import { Search, Filter, History, RotateCcw } from "lucide-react";
 import { questions } from "@/data/questions";
 import KnowledgeGraph from "@/components/KnowledgeGraph";
 import QuestionCard from "@/components/QuestionCard";
@@ -24,8 +24,17 @@ export default function Home() {
   const [excludedYears, setExcludedYears] = useState<Set<number>>(new Set());
   const [showMap, setShowMap] = useState<boolean>(false);
 
-  // NEW: State to hold the history of marked answers for the sidebar
+  
+
+
+
+  // ... other states
   const [activityTracker, setActivityTracker] = useState<ActivityLog[]>([]);
+  
+  // ADD THIS EXACT LINE RIGHT HERE:
+  const [resetCount, setResetCount] = useState(0); 
+
+  // ... rest of your code
 
   const availableSubjects = useMemo(() => {
     const subjects = questions.map(q => q.subject).filter(Boolean) as string[];
@@ -60,6 +69,12 @@ export default function Home() {
     if (newSet.has(value)) newSet.delete(value);
     else newSet.add(value);
     updateState(newSet);
+  };
+
+  // NEW: Wipes the activity log and forces all QuestionCards to respawn
+  const handleResetAll = () => {
+    setActivityTracker([]); 
+    setResetCount(prev => prev + 1); 
   };
 
   // NEW: Function to catch the signal from QuestionCard and add it to the sidebar
@@ -215,9 +230,8 @@ export default function Home() {
           <div className="space-y-6">
             {filteredQuestions.map((q, index) => (
               <QuestionCard 
-                key={index} 
+                key={`${index}-${resetCount}`} 
                 question={q} 
-                // We pass the function down to listen for clicks
                 onOptionMarked={(letter) => handleLogActivity(q.question_number, q.subject, letter)}
               />
             ))}
@@ -230,9 +244,21 @@ export default function Home() {
           {/* position: sticky keeps it on screen even when you scroll down 90 pages */}
           <div className="sticky top-8 bg-neutral-900/30 border border-neutral-800/60 rounded-2xl p-5 backdrop-blur-xl shadow-2xl h-[calc(100vh-4rem)] overflow-y-auto flex flex-col">
             
-            <div className="flex items-center gap-2 border-b border-neutral-800/80 pb-4 mb-4">
-              <History className="w-5 h-5 text-neutral-400" />
-              <h3 className="text-base font-semibold text-white tracking-wide">Activity Log</h3>
+            <div className="flex items-center justify-between border-b border-neutral-800/80 pb-4 mb-4">
+              <div className="flex items-center gap-2">
+                <History className="w-5 h-5 text-neutral-400" />
+                <h3 className="text-base font-semibold text-white tracking-wide">Activity Log</h3>
+              </div>
+              
+              {activityTracker.length > 0 && (
+                <button 
+                  onClick={handleResetAll}
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all text-xs font-semibold tracking-wide animate-in fade-in"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  Reset
+                </button>
+              )}
             </div>
 
             <div className="flex-grow space-y-3">
