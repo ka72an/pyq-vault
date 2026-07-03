@@ -12,7 +12,9 @@ export interface Question {
   options?: string[];
   answer?: string | null;
   explanation?: string | null;
-  subject: string; 
+  subject: string;
+  topic?: string;    // <-- Added this
+  chapter?: string;  // <-- Added this
 }
 
 // 2. Inject the subject name (and cast 'q' as 'any' to fix the squiggly line)
