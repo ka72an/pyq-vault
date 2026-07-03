@@ -63,15 +63,39 @@ export default function Home() {
   };
 
   // NEW: Function to catch the signal from QuestionCard and add it to the sidebar
+  // NEW: Smart Function to catch the signal and prevent duplicates
   const handleLogActivity = (qNum: number | null | undefined, subject: string, letter: string) => {
     setActivityTracker(prev => {
+      const questionId = qNum || "N/A";
+      
+      // 1. Check if this exact question is already in the log
+      const existingIndex = prev.findIndex(log => log.qNum === questionId && log.subject === subject);
+
+      if (existingIndex !== -1) {
+        // 2. If they clicked the exact SAME option again, do absolutely nothing
+        if (prev[existingIndex].letter === letter) {
+          return prev;
+        }
+        
+        // 3. If they clicked a DIFFERENT option, update it and bring it to the top
+        const newTracker = [...prev];
+        const [updatedEntry] = newTracker.splice(existingIndex, 1);
+        
+        updatedEntry.letter = letter;
+        // We give it a fresh ID so the cool slide-in animation triggers again
+        updatedEntry.id = Math.random().toString(36).substr(2, 9); 
+        
+        return [updatedEntry, ...newTracker];
+      }
+
+      // 4. If it is a brand new question, add it to the top normally
       const newEntry = {
         id: Math.random().toString(36).substr(2, 9),
-        qNum: qNum || "N/A",
+        qNum: questionId,
         subject: subject,
         letter: letter
       };
-      // Keep only the last 15 actions so the sidebar doesn't scroll infinitely
+      
       return [newEntry, ...prev].slice(0, 15);
     });
   };
