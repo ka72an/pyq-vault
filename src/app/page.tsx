@@ -100,6 +100,19 @@ export default function Home() {
     });
   };
 
+  // Helper to match sidebar text colors to the QuestionCard glowing edge colors
+  const getSubjectColor = (subject: string) => {
+    const key = subject.toLowerCase();
+    const colors: Record<string, string> = {
+      computer: "text-purple-400",
+      economics: "text-emerald-400",
+      polity: "text-sky-400",
+      geography: "text-amber-400",
+      environment: "text-teal-400"
+    };
+    return colors[key] || "text-neutral-500";
+  };
+
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-200 p-6 lg:p-8 font-sans">
       
@@ -234,9 +247,9 @@ export default function Home() {
                       <span className="text-xs font-mono font-medium px-2 py-1 bg-neutral-900 border border-neutral-800 rounded text-neutral-400">
                         Q. {log.qNum}
                       </span>
-                      <span className="text-[9px] font-bold uppercase tracking-widest text-neutral-500">
-                        {log.subject}
-                      </span>
+                      <span className={`text-[10px] font-bold uppercase tracking-widest drop-shadow-sm ${getSubjectColor(log.subject)}`}>
+                      {log.subject}
+                    </span>
                     </div>
                     <div className="text-sm text-neutral-300 flex items-center justify-between">
                       <span>Marked Option:</span>
