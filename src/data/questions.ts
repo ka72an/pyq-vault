@@ -1,0 +1,43 @@
+// 1. Import your raw JSON files
+import computerRaw from "./raw_json/computer.json";
+import environmentRaw from "./raw_json/environment.json"; 
+import polityRaw from "./raw_json/polity.json";
+import economicsRaw from "./raw_json/economics.json";// <-- Cleaned up the name here
+
+// Define the shape of your question so TypeScript doesn't yell at you
+export interface Question {
+  question_number?: number | null;
+  year?: number | null;
+  text: string;
+  options?: string[];
+  answer?: string | null;
+  explanation?: string | null;
+  subject: string; 
+}
+
+// 2. Inject the subject name (and cast 'q' as 'any' to fix the squiggly line)
+const computerQuestions: Question[] = computerRaw.map((q: any) => ({
+  ...q,
+  subject: "Computer"
+}));
+
+const environmentQuestions: Question[] = environmentRaw.map((q: any) => ({
+  ...q,
+  subject: "Environment"
+}));
+const polityQuestions: Question[] = polityRaw.map((q: any) => ({
+  ...q,
+  subject: "Polity"
+}));
+const economicsQuestions: Question[] = economicsRaw.map((q: any) => ({
+  ...q,
+  subject: "Economics"
+}));
+
+// 3. Export the final, massive combined array
+export const questions: Question[] = [
+  ...computerQuestions,
+  ...environmentQuestions,
+  ...polityQuestions,
+  ...economicsQuestions,
+];

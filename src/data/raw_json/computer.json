@@ -1,0 +1,194 @@
+[
+  {
+    "question_number": 117,
+    "year": 2025,
+    "text": "Which one of the following is an application of Artificial Intelligence?",
+    "options": [
+      "Database management system",
+      "Operating system",
+      "Natural language processing",
+      "Register"
+    ],
+    "answer": null
+  },
+  {
+    "question_number": 80,
+    "year": 2025,
+    "text": "Which of the following statements with reference to raster data format is/are correct? 1. It has a simple data structure which is compatible with remote sensing imagery. 2. The relationship between cell size and number of cells is expressed as the resolution of the raster. Select the answer using the code given below.",
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "answer": null
+  },
+  {
+    "question_number": 81,
+    "year": 2025,
+    "text": "Which of the following are components of Information System? 1. Data 2. Hardware 3. Software 4. People Select the correct answer using the code given below.",
+    "options": [
+      "1 and 4 only",
+      "2 and 3 only",
+      "1, 2 and 3 only",
+      "1, 2, 3 and 4"
+    ],
+    "answer": null
+  },
+  {
+    "question_number": 116,
+    "year": 2025,
+    "text": "Which one among the following computer languages is the oldest?",
+    "options": [
+      "LISP",
+      "C++",
+      "Java",
+      "Fortran"
+    ],
+    "answer": null
+  },
+  {
+    "question_number": 118,
+    "year": 2025,
+    "text": "What is the correct term used for a set of wires used to connect different internal components of the computer system for the purpose of transferring data as well as addresses amongst them?",
+    "options": [
+      "Hub",
+      "Bus",
+      "Router",
+      "Switch"
+    ],
+    "answer": null
+  },
+  {
+    "question_number": 119,
+    "year": 2025,
+    "text": "Consider the following : 1. Small memory 2. Less expensive memory 3. Fast memory Which of the above are the characteristics of the cache memory?",
+    "options": [
+      "1 and 2 only",
+      "2 and 3 only",
+      "1 and 3 only",
+      "1, 2 and 3"
+    ],
+    "answer": null
+  },
+  {
+    "question_number": 1,
+    "year": 2024,
+    "text": "Which one among the following is NOT a non-procedural computer language ?",
+    "options": [
+      "LISP",
+      "Python",
+      "Prolog",
+      "ML"
+    ],
+    "answer": null
+  },
+  {
+    "question_number": 2,
+    "year": 2024,
+    "text": "Consider the following : 1. MPEG 2. P*64 3. Indeo Which of the above can be used to compress video files ?",
+    "options": [
+      "1 and 2 only",
+      "1 and 3 only",
+      "2 and 3 only",
+      "1, 2 and 3"
+    ],
+    "answer": null
+  },
+  {
+    "question_number": 9,
+    "year": 2022,
+    "text": "Which one of the following is not an operating system?",
+    "options": [
+      "MS-Windows",
+      "Linux",
+      "Ubuntu",
+      "MS-Excel"
+    ],
+    "answer": null
+  },
+  {
+    "question_number": 10,
+    "year": 2022,
+    "text": "Which one of the following protocols is not an application layer of the TCP/IP model?",
+    "options": [
+      "FTP",
+      "HTTP",
+      "DNS",
+      "IP"
+    ],
+    "answer": null
+  },
+  {
+    "question_number": 11,
+    "year": 2022,
+    "text": "Which one of the following is a semi-conductor device that is used to increase the power of the incoming signals by preserving the shape of the original signal?",
+    "options": [
+      "Register",
+      "Transistor",
+      "Flip-flop",
+      "Diode"
+    ],
+    "answer": null
+  },
+  {
+    "question_number": 92,
+    "year": 2014,
+    "text": "What is clickjacking ?",
+    "options": [
+      "A device that sends and receives data at every click in a bit second",
+      "A device which does/counts clicks on internet",
+      "A malicious technique of tricking Web users into revealing confidential information",
+      "A digital process that is used to display an image on mobiles"
+    ],
+    "answer": null
+  },
+  {
+    "question_number": 83,
+    "year": 2014,
+    "text": "3G and 4G are wireless technologies, which are supposedly faster, more secure and reliable. Present day 3G technology is capable of handling data around 2 Megabits per second (1.8 - 2.5 GHz frequency band). What speed is expected from new 4G technology ?",
+    "options": [
+      "10-30 Megabits per second (1-5 GHz frequency band)",
+      "10-100 Megabits per second (2-10 GHz frequency band)",
+      "100 Megabits—1 Gigabit per second (2-8 GHz frequency band)",
+      "More than 10 Gigabits per second (10-20 GHz.frequency band)"
+    ],
+    "answer": null
+  },
+  {
+    "question_number": 35,
+    "year": 2013,
+    "text": "Which one among the following statements about ‘modem’ is correct?",
+    "options": [
+      "Modem is a software",
+      "Modem helps in stabilizing the voltage",
+      "Modem is an operating system",
+      "Modem converts the analog signal into digital signal and vice versa"
+    ],
+    "answer": "D"
+  },
+  {
+    "question_number": 103,
+    "year": null,
+    "text": "Which of the following is the correct chronological order of TV display technologies?",
+    "options": [
+      "CRT, Plasma, LED",
+      "CRT, LED, Plasma",
+      "LED, CRT, Plasma",
+      "Plasma, LED, CRT"
+    ],
+    "answer": "D"
+  },
+  {
+    "question_number": 14,
+    "year": null,
+    "text": "Wi-Fi in a computer implies",
+    "options": [
+      "wired local area network",
+      "wireless local area network",
+      "high fidelity",
+      "high efficiency"
+    ],
+    "answer": null
+  }
+]
