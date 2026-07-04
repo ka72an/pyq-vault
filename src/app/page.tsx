@@ -11,6 +11,7 @@ type ActivityLog = {
   id: string;
   qNum: number | string;
   subject: string;
+  year?: number | null;
   letter: string;
 };
 
@@ -79,7 +80,7 @@ export default function Home() {
 
   // NEW: Function to catch the signal from QuestionCard and add it to the sidebar
   // NEW: Smart Function to catch the signal and prevent duplicates
-  const handleLogActivity = (qNum: number | null | undefined, subject: string, letter: string) => {
+  const handleLogActivity = (qNum: number | null | undefined, subject: string, letter: string,year: number | null | undefined) => {
     setActivityTracker(prev => {
       const questionId = qNum || "N/A";
       
@@ -104,10 +105,11 @@ export default function Home() {
       }
 
       // 4. If it is a brand new question, add it to the top normally
-      const newEntry = {
+      const newEntry : ActivityLog = {
         id: Math.random().toString(36).substr(2, 9),
         qNum: questionId,
         subject: subject,
+        year: year,
         letter: letter
       };
       
@@ -233,7 +235,7 @@ export default function Home() {
               <QuestionCard 
                 key={`${index}-${resetCount}`} 
                 question={q} 
-                onOptionMarked={(letter) => handleLogActivity(q.question_number, q.subject, letter)}
+                onOptionMarked={(letter) => handleLogActivity(q.question_number, q.subject, letter, q.year)}
               />
             ))}
           </div>
@@ -281,7 +283,7 @@ export default function Home() {
                     <div className="text-sm text-neutral-300 flex items-center justify-between">
                       <span>Marked Option:</span>
                       <strong className="text-white bg-white/10 px-2 py-0.5 rounded shadow-sm">
-                        {log.letter}
+                        {log.letter}{log.year ? `• ${log.year}` : ""}
                       </strong>
                     </div>
                   </div>
