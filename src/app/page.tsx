@@ -123,7 +123,8 @@ export default function Home() {
       economics: "text-emerald-400",
       polity: "text-sky-400",
       geography: "text-amber-400",
-      environment: "text-teal-400"
+      environment: "text-teal-400",
+      science: "text-blue-400"     // <-- Add this
     };
     return colors[key] || "text-neutral-500";
   };

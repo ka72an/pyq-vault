@@ -41,6 +41,12 @@ const SUBJECT_STYLING: Record<string, { badge: string; border: string; glow: str
     glow: "from-teal-500/20 to-transparent",
     text: "text-teal-400"
   },
+  science: {
+    badge: "bg-yellow-500/10 text-teal-400 border-teal-500/20",
+    border: "group-hover:border-yellow-500/30",
+    glow: "from-yellow-500/20 to-transparent",
+    text: "text-yellow-400"
+  },
   default: {
     badge: "bg-zinc-800 text-zinc-400 border-zinc-700",
     border: "group-hover:border-zinc-700",
