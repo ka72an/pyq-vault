@@ -5,7 +5,7 @@ import { Search, Filter, History, RotateCcw, Download } from "lucide-react";
 import { questions } from "@/data/questions";
 import KnowledgeGraph from "@/components/KnowledgeGraph";
 import QuestionCard from "@/components/QuestionCard";
-import { toPng } from 'html-to-image'; // <-- Added this
+import { toJpeg } from 'html-to-image'; // <-- Added this
 import jsPDF from 'jspdf';             // <-- Added this
 // ... your other imports
 
@@ -84,32 +84,32 @@ export default function Home() {
   // NEW: Generates and downloads the OMR PDF
   // NEW: Generates and downloads the OMR PDF (Now using html-to-image!)
   // NEW: Generates and downloads the OMR PDF (With Multi-Page Support!)
+  // NEW: Generates Multi-Page, Compressed OMR PDF
   const handleDownloadOMR = async () => {
-    const element = document.getElementById('omr-sheet-template');
-    if (!element) return;
+    const pages = document.querySelectorAll('.omr-page-template');
+    if (pages.length === 0) return;
 
     try {
-      // Takes a high-quality snapshot
-      const dataUrl = await toPng(element, { quality: 1, pixelRatio: 2 });
-      
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight(); // Standard A4 height (297mm)
-      const imgHeight = (element.offsetHeight * pdfWidth) / element.offsetWidth;
-      
-      let heightLeft = imgHeight;
-      let position = 0;
 
-      // Print the very first page
-      pdf.addImage(dataUrl, 'PNG', 0, position, pdfWidth, imgHeight);
-      heightLeft -= pageHeight;
+      for (let i = 0; i < pages.length; i++) {
+        const element = pages[i] as HTMLElement;
+        
+        // Use JPEG with 80% quality. This drops the file size by like 95%
+        const dataUrl = await toJpeg(element, { 
+          quality: 0.8, 
+          pixelRatio: 1.5, 
+          backgroundColor: '#ffffff' 
+        });
 
-      // If the image is taller than one page, loop through and keep adding pages!
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight; // Shifts the image up so the next chunk shows
-        pdf.addPage();
-        pdf.addImage(dataUrl, 'PNG', 0, position, pdfWidth, imgHeight);
-        heightLeft -= pageHeight;
+        if (i > 0) pdf.addPage(); // Add a new PDF page for every loop after the first
+        
+        // Calculate proportional height to prevent stretching
+        const imgProps = pdf.getImageProperties(dataUrl);
+        const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        pdf.addImage(dataUrl, 'JPEG', 0, 0, pdfWidth, imgHeight);
       }
       
       pdf.save('PYQ_Vault_OMR_Sheet.pdf');
@@ -170,6 +170,16 @@ export default function Home() {
     };
     return colors[key] || "text-neutral-500";
   };
+
+  // NEW: Split the tracked answers into pages of 24 questions each for perfect PDF slicing
+  const QUESTIONS_PER_PAGE = 24;
+  const chunkedLogs = [];
+  for (let i = 0; i < activityTracker.length; i += QUESTIONS_PER_PAGE) {
+    chunkedLogs.push(activityTracker.slice(i, i + QUESTIONS_PER_PAGE));
+  }
+  // Ensure we at least generate one blank page if the tracker is empty
+  if (chunkedLogs.length === 0) chunkedLogs.push([]);
+  // -----------------------------------------------
 
   return (
    
@@ -349,58 +359,62 @@ export default function Home() {
         </div>
 
       </div>
-      {/* --- HIDDEN OMR SHEET TEMPLATE FOR PDF EXPORT --- */}
-      <div className="fixed top-[200%] left-0 z-[-50] pointer-events-none">
-        <div id="omr-sheet-template" className="bg-white text-black p-12 w-[800px] min-h-[1131px]">
-          
-          {/* OMR Header */}
-          <div className="border-b-4 border-black pb-6 mb-8 text-center flex flex-col items-center">
-            <h1 className="text-4xl font-extrabold uppercase tracking-widest mb-2">PYQ Vault</h1>
-            <div className="bg-black text-white px-6 py-1.5 rounded-full text-xl font-bold tracking-widest inline-block">
-              OMR ANSWER SHEET
-            </div>
-            <div className="w-full flex justify-between mt-8 text-sm font-bold uppercase tracking-wider border-t-2 border-black pt-4">
-              <span>Candidate Sign: ____________________</span>
-              <span>Total Marked: {activityTracker.length}</span>
-              <span>Date: {new Date().toLocaleDateString()}</span>
-            </div>
-          </div>
-
-          {/* OMR Body: Grid of Answers */}
-          <div className="grid grid-cols-2 gap-x-16 gap-y-6">
-            {activityTracker.map((log) => (
-              <div key={log.id} className="flex items-center justify-between border-b border-gray-300 pb-2">
-                
-                {/* Question Info */}
-                <div className="flex flex-col w-1/2">
-                  <span className="font-extrabold text-lg">Q. {log.qNum}</span>
-                  <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                    {log.subject} {log.year ? `• ${log.year}` : ""}
-                  </span>
-                </div>
-
-                {/* Bubbles */}
-                <div className="flex gap-3">
-                  {['A', 'B', 'C', 'D'].map(letter => (
-                    <div 
-                      key={letter} 
-                      className={`w-8 h-8 rounded-full border-[3px] border-black flex items-center justify-center font-bold text-sm
-                        ${log.letter === letter ? 'bg-black text-white' : 'bg-white text-black'}`}
-                    >
-                      {letter}
-                    </div>
-                  ))}
-                </div>
-
+      {/* --- HIDDEN MULTI-PAGE OMR TEMPLATE FOR PDF EXPORT --- */}
+      <div className="fixed top-[200%] left-0 z-[-50] pointer-events-none flex flex-col gap-10">
+        {chunkedLogs.map((chunk, pageIndex) => (
+          <div key={pageIndex} className="omr-page-template bg-white text-black p-12 w-[800px] h-[1131px] flex flex-col">
+            {/* Explicitly sized A4 container (800x1131px) */}
+            
+            {/* OMR Header */}
+            <div className="border-b-4 border-black pb-6 mb-8 text-center flex flex-col items-center shrink-0">
+              <h1 className="text-4xl font-extrabold uppercase tracking-widest mb-2">PYQ Vault</h1>
+              <div className="bg-black text-white px-6 py-1.5 rounded-full text-xl font-bold tracking-widest inline-block">
+                OMR ANSWER SHEET {chunkedLogs.length > 1 ? `- PAGE ${pageIndex + 1}` : ""}
               </div>
-            ))}
-          </div>
+              <div className="w-full flex justify-between mt-8 text-sm font-bold uppercase tracking-wider border-t-2 border-black pt-4">
+                <span>Candidate Sign: ____________________</span>
+                <span>Total Marked: {activityTracker.length}</span>
+                <span>Date: {new Date().toLocaleDateString()}</span>
+              </div>
+            </div>
 
-          {/* OMR Footer */}
-          <div className="mt-12 text-center text-xs font-bold text-gray-500 uppercase tracking-widest border-t-2 border-black pt-4">
-            Generated by PYQ Vault Tracker
+            {/* OMR Body: Grid of Answers */}
+            <div className="grid grid-cols-2 gap-x-16 gap-y-6 flex-grow content-start">
+              {chunk.map((log) => (
+                <div key={log.id} className="flex items-center justify-between border-b border-gray-300 pb-2">
+                  
+                  {/* Question Info */}
+                  <div className="flex flex-col w-1/2">
+                    <span className="font-extrabold text-lg">Q. {log.qNum}</span>
+                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                      {log.subject} {log.year ? `• ${log.year}` : ""}
+                    </span>
+                  </div>
+
+                  {/* Bubbles */}
+                  <div className="flex gap-3">
+                    {['A', 'B', 'C', 'D'].map(letter => (
+                      <div 
+                        key={letter} 
+                        className={`w-8 h-8 rounded-full border-[3px] border-black flex items-center justify-center font-bold text-sm
+                          ${log.letter === letter ? 'bg-black text-white' : 'bg-white text-black'}`}
+                      >
+                        {letter}
+                      </div>
+                    ))}
+                  </div>
+
+                </div>
+              ))}
+            </div>
+
+            {/* OMR Footer */}
+            <div className="mt-8 text-center text-xs font-bold text-gray-500 uppercase tracking-widest border-t-2 border-black pt-4 shrink-0">
+              Generated by PYQ Vault Tracker • Page {pageIndex + 1} of {chunkedLogs.length}
+            </div>
+            
           </div>
-        </div>
+        ))}
       </div> {/* <-- Closes the Hidden OMR Template */}
     
       </div>
