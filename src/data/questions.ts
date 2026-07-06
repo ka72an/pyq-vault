@@ -4,7 +4,8 @@ import environmentRaw from "./raw_json/environment.json";
 import polityRaw from "./raw_json/polity.json";
 import economicsRaw from "./raw_json/economics.json";
 import scienceRaw from "./raw_json/science.json";
-import geographyRaw from "./raw_json/geography.json";// <-- Cleaned up the name here
+import geographyRaw from "./raw_json/geography.json";
+import mathsRaw from "./raw_json/maths.json";// <-- Cleaned up the name here
 
 // Define the shape of your question so TypeScript doesn't yell at you
 export interface Question {
@@ -45,6 +46,10 @@ const geographyQuestions: Question[] = geographyRaw.map((q: any) => ({
   ...q,
   subject: "Geography"
 }));
+const mathsQuestions: Question[] = mathsRaw.map((q: any) => ({
+  ...q,
+  subject: "Maths"
+}));
 
 // 3. Export the final, massive combined array
 export const questions: Question[] = [
@@ -54,4 +59,5 @@ export const questions: Question[] = [
   ...economicsQuestions,
   ...scienceQuestions,
   ...geographyQuestions,
+  ...mathsQuestions,
 ];

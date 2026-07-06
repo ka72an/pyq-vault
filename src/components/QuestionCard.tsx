@@ -42,10 +42,16 @@ const SUBJECT_STYLING: Record<string, { badge: string; border: string; glow: str
     text: "text-teal-400"
   },
   science: {
-    badge: "bg-yellow-500/10 text-teal-400 border-teal-500/20",
+    badge: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20",
     border: "group-hover:border-yellow-500/30",
     glow: "from-yellow-500/20 to-transparent",
     text: "text-yellow-400"
+  },
+  maths: {
+    badge: "bg-rose-500/10 text-rose-400 border-teal-500/20",
+    border: "group-hover:border-rose-500/30",
+    glow: "from-rose-500/20 to-transparent",
+    text: "text-rose-400"
   },
   default: {
     badge: "bg-zinc-800 text-zinc-400 border-zinc-700",
