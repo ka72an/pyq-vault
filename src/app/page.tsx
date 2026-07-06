@@ -1,10 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Filter, History, RotateCcw } from "lucide-react";
+import { Search, Filter, History, RotateCcw, Download } from "lucide-react";
 import { questions } from "@/data/questions";
 import KnowledgeGraph from "@/components/KnowledgeGraph";
 import QuestionCard from "@/components/QuestionCard";
+import { toPng } from 'html-to-image'; // <-- Added this
+import jsPDF from 'jspdf';             // <-- Added this
+// ... your other imports
 
 // Define the shape of our new sidebar tracking log
 type ActivityLog = {
@@ -78,6 +81,43 @@ export default function Home() {
     setResetCount(prev => prev + 1); 
   };
 
+  // NEW: Generates and downloads the OMR PDF
+  // NEW: Generates and downloads the OMR PDF (Now using html-to-image!)
+  // NEW: Generates and downloads the OMR PDF (With Multi-Page Support!)
+  const handleDownloadOMR = async () => {
+    const element = document.getElementById('omr-sheet-template');
+    if (!element) return;
+
+    try {
+      // Takes a high-quality snapshot
+      const dataUrl = await toPng(element, { quality: 1, pixelRatio: 2 });
+      
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight(); // Standard A4 height (297mm)
+      const imgHeight = (element.offsetHeight * pdfWidth) / element.offsetWidth;
+      
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      // Print the very first page
+      pdf.addImage(dataUrl, 'PNG', 0, position, pdfWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      // If the image is taller than one page, loop through and keep adding pages!
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight; // Shifts the image up so the next chunk shows
+        pdf.addPage();
+        pdf.addImage(dataUrl, 'PNG', 0, position, pdfWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+      
+      pdf.save('PYQ_Vault_OMR_Sheet.pdf');
+    } catch (err) {
+      console.error('PDF Generation Failed:', err);
+    }
+  };
+
   // NEW: Function to catch the signal from QuestionCard and add it to the sidebar
   // NEW: Smart Function to catch the signal and prevent duplicates
   const handleLogActivity = (qNum: number | null | undefined, subject: string, letter: string,year: number | null | undefined) => {
@@ -113,7 +153,7 @@ export default function Home() {
         letter: letter
       };
       
-      return [newEntry, ...prev].slice(0, 15);
+      return [newEntry, ...prev];
     });
   };
 
@@ -132,6 +172,7 @@ export default function Home() {
   };
 
   return (
+   
     <div className="min-h-screen bg-neutral-950 text-neutral-200 p-6 lg:p-8 font-sans">
       
       {/* EXPANDED CONTAINER: max-w-[1400px] and grid layout */}
@@ -244,23 +285,32 @@ export default function Home() {
 
         {/* ─── RIGHT COLUMN: Sticky Sidebar Tracker (Takes up 1/4 of the screen) ─── */}
         <div className="hidden lg:block lg:col-span-1">
-          {/* position: sticky keeps it on screen even when you scroll down 90 pages */}
           <div className="sticky top-8 bg-neutral-900/30 border border-neutral-800/60 rounded-2xl p-5 backdrop-blur-xl shadow-2xl h-[calc(100vh-4rem)] overflow-y-auto flex flex-col">
             
-            <div className="flex items-center justify-between border-b border-neutral-800/80 pb-4 mb-4">
+            {/* FIX: Changed to flex-col so the title and buttons stack cleanly */}
+            <div className="flex flex-col gap-4 border-b border-neutral-800/80 pb-5 mb-4">
               <div className="flex items-center gap-2">
                 <History className="w-5 h-5 text-neutral-400" />
-                <h3 className="text-base font-semibold text-white tracking-wide">Activity Log</h3>
+                <h3 className="text-lg font-semibold text-white tracking-wide">Activity Log</h3>
               </div>
               
               {activityTracker.length > 0 && (
-                <button 
-                  onClick={handleResetAll}
-                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all text-xs font-semibold tracking-wide animate-in fade-in"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  Reset
-                </button>
+                <div className="flex gap-2 w-full">
+                  <button 
+                    onClick={handleDownloadOMR}
+                    className="flex-1 flex justify-center items-center gap-1.5 px-2 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 transition-all text-xs font-semibold tracking-wide shadow-sm"
+                  >
+                    <Download className="w-4 h-4" />
+                    Download
+                  </button>
+                  <button 
+                    onClick={handleResetAll}
+                    className="flex-1 flex justify-center items-center gap-1.5 px-2 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all text-xs font-semibold tracking-wide shadow-sm"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    Reset
+                  </button>
+                </div>
               )}
             </div>
 
@@ -272,20 +322,24 @@ export default function Home() {
               ) : (
                 activityTracker.map((log) => (
                   <div key={log.id} className="bg-neutral-950/60 border border-neutral-800/60 rounded-xl p-3.5 shadow-inner transition-all animate-in fade-in slide-in-from-right-4 duration-300">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-xs font-mono font-medium px-2 py-1 bg-neutral-900 border border-neutral-800 rounded text-neutral-400">
+                    
+                    {/* FIX: Stacked the Question Number and Subject so they never overlap */}
+                    <div className="flex flex-col gap-2 mb-3">
+                      <span className="self-start text-xs font-mono font-medium px-2 py-1 bg-neutral-900 border border-neutral-800 rounded text-neutral-400">
                         Q. {log.qNum}
                       </span>
                       <span className={`text-[10px] font-bold uppercase tracking-widest drop-shadow-sm ${getSubjectColor(log.subject)}`}>
-                      {log.subject}
-                    </span>
+                        {log.subject}{log.year ? ` • ${log.year}` : ""}
+                      </span>
                     </div>
-                    <div className="text-sm text-neutral-300 flex items-center justify-between">
+                    
+                    <div className="text-sm text-neutral-300 flex items-center justify-between border-t border-neutral-800/50 pt-2.5">
                       <span>Marked Option:</span>
-                      <strong className="text-white bg-white/10 px-2 py-0.5 rounded shadow-sm">
-                        {log.letter}{log.year ? `• ${log.year}` : ""}
+                      <strong className="text-white bg-white/10 px-3 py-0.5 rounded shadow-sm">
+                        {log.letter}
                       </strong>
                     </div>
+                    
                   </div>
                 ))
               )}
@@ -295,6 +349,61 @@ export default function Home() {
         </div>
 
       </div>
-    </div>
+      {/* --- HIDDEN OMR SHEET TEMPLATE FOR PDF EXPORT --- */}
+      <div className="fixed top-[200%] left-0 z-[-50] pointer-events-none">
+        <div id="omr-sheet-template" className="bg-white text-black p-12 w-[800px] min-h-[1131px]">
+          
+          {/* OMR Header */}
+          <div className="border-b-4 border-black pb-6 mb-8 text-center flex flex-col items-center">
+            <h1 className="text-4xl font-extrabold uppercase tracking-widest mb-2">PYQ Vault</h1>
+            <div className="bg-black text-white px-6 py-1.5 rounded-full text-xl font-bold tracking-widest inline-block">
+              OMR ANSWER SHEET
+            </div>
+            <div className="w-full flex justify-between mt-8 text-sm font-bold uppercase tracking-wider border-t-2 border-black pt-4">
+              <span>Candidate Sign: ____________________</span>
+              <span>Total Marked: {activityTracker.length}</span>
+              <span>Date: {new Date().toLocaleDateString()}</span>
+            </div>
+          </div>
+
+          {/* OMR Body: Grid of Answers */}
+          <div className="grid grid-cols-2 gap-x-16 gap-y-6">
+            {activityTracker.map((log) => (
+              <div key={log.id} className="flex items-center justify-between border-b border-gray-300 pb-2">
+                
+                {/* Question Info */}
+                <div className="flex flex-col w-1/2">
+                  <span className="font-extrabold text-lg">Q. {log.qNum}</span>
+                  <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                    {log.subject} {log.year ? `• ${log.year}` : ""}
+                  </span>
+                </div>
+
+                {/* Bubbles */}
+                <div className="flex gap-3">
+                  {['A', 'B', 'C', 'D'].map(letter => (
+                    <div 
+                      key={letter} 
+                      className={`w-8 h-8 rounded-full border-[3px] border-black flex items-center justify-center font-bold text-sm
+                        ${log.letter === letter ? 'bg-black text-white' : 'bg-white text-black'}`}
+                    >
+                      {letter}
+                    </div>
+                  ))}
+                </div>
+
+              </div>
+            ))}
+          </div>
+
+          {/* OMR Footer */}
+          <div className="mt-12 text-center text-xs font-bold text-gray-500 uppercase tracking-widest border-t-2 border-black pt-4">
+            Generated by PYQ Vault Tracker
+          </div>
+        </div>
+      </div> {/* <-- Closes the Hidden OMR Template */}
+    
+      </div>
+
   );
 }
