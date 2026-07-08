@@ -51,7 +51,7 @@ export default function Home() {
   }, []);
 
   const filteredQuestions = useMemo(() => {
-    return questions.filter((q) => {
+    const results = questions.filter((q) => {
       if (graphSelectedType === "subject" && q.subject !== graphSelectedNode) return false;
       if (graphSelectedType === "topic" && q.topic !== graphSelectedNode) return false;
       if (q.subject && excludedSubjects.has(q.subject)) return false;
@@ -65,6 +65,21 @@ export default function Home() {
       ].filter(Boolean).join(" ").toLowerCase();
 
       return tokens.every((token) => searchableText.includes(token));
+    });
+
+    // NEW: Sort the feed! Year (Newest First) -> Subject (A-Z) -> Question Number (1-125)
+    return results.sort((a, b) => {
+      const yearA = a.year || 0;
+      const yearB = b.year || 0;
+      if (yearA !== yearB) return yearB - yearA; // Newest years at the top
+
+      const subjA = a.subject || "";
+      const subjB = b.subject || "";
+      if (subjA !== subjB) return subjA.localeCompare(subjB); // Group subjects together
+
+      const numA = parseInt(String(a.question_number)) || 0;
+      const numB = parseInt(String(b.question_number)) || 0;
+      return numA - numB; // Exact numerical order
     });
   }, [searchQuery, excludedSubjects, excludedYears, graphSelectedNode, graphSelectedType]);
 

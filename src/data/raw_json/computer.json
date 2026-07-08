@@ -169,7 +169,7 @@
   },
   {
     "question_number": 103,
-    "year": null,
+    "year": 2013,
     "text": "Which of the following is the correct chronological order of TV display technologies?",
     "options": [
       "CRT, Plasma, LED",
@@ -181,7 +181,7 @@
   },
   {
     "question_number": 14,
-    "year": null,
+    "year": 2012,
     "text": "Wi-Fi in a computer implies",
     "options": [
       "wired local area network",

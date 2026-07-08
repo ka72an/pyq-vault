@@ -313,7 +313,7 @@
   },
   {
     "question_number": 26,
-    "year": null,
+    "year": 2023,
     "text": "An Indian businessperson buys shares in a British car company. This transaction will be reflected in :",
     "options": [
       "Balance of Trade, but not in Balance of Payments.",
@@ -349,7 +349,7 @@
   },
   {
     "question_number": 29,
-    "year": null,
+    "year": 2023,
     "text": "If the Cash Reserve Ratio is lowered by the RBI, supply of money in the economy will :",
     "options": [
       "remain unchanged.",
@@ -373,7 +373,7 @@
   },
   {
     "question_number": 66,
-    "year": null,
+    "year": 2023,
     "text": "Which one of the following is the largest component of expenditure in the Union Budget 2022-23 ?",
     "options": [
       "Interest payments",
@@ -385,7 +385,7 @@
   },
   {
     "question_number": 69,
-    "year": null,
+    "year": 2023,
     "text": "The banks are required to maintain a certain ratio between their cash in hand and total assets. This ratio is known as :",
     "options": [
       "Cash Reserve Ratio (CRR)",
@@ -409,7 +409,7 @@
   },
   {
     "question_number": 97,
-    "year": null,
+    "year": 2022,
     "text": "With reference to Indian economy, the term ‘bad bank’, frequently mentioned in news, refers to",
     "options": [
       "an asset reconstruction company",
@@ -421,7 +421,7 @@
   },
   {
     "question_number": 107,
-    "year": null,
+    "year": 2022,
     "text": "A non-banking financial company cannot",
     "options": [
       "give loans",
@@ -457,7 +457,7 @@
   },
   {
     "question_number": 111,
-    "year": null,
+    "year": 2022,
     "text": "In the first quarter of fiscal year 2020-21, GDP contracted by 23.9 percent and in the second quarter, by 7.5 percent. The Economic Survey, 2020-21 preferred to call it a recovery in",
     "options": [
       "U-shape",
@@ -493,7 +493,7 @@
   },
   {
     "question_number": 33,
-    "year": null,
+    "year": 2021,
     "text": "Which one of the following functions as an automatic stabilizer in the context of fiscal and monetary policies of an economy?",
     "options": [
       "Personal income tax",
@@ -505,7 +505,7 @@
   },
   {
     "question_number": 56,
-    "year": null,
+    "year": 2021,
     "text": "Which one among the following statements is not correct?",
     "options": [
       "When the economy grows slowly than its potential, the unemployment rate rises.",
@@ -529,7 +529,7 @@
   },
   {
     "question_number": 58,
-    "year": null,
+    "year": 2021,
     "text": "For anything to be recognized as money, it needs to have which of the following characteristics? 1. Act as an intermediate in the exchange process 2. Standard unit for quoting prices 3. Must be easily divisible 4. Have higher value in alternative uses Select the correct answer using the code given below.",
     "options": [
       "1, 2 and 4",
@@ -541,7 +541,7 @@
   },
   {
     "question_number": 59,
-    "year": null,
+    "year": 2021,
     "text": "The sectoral shares of Gross Value Added (GVA) for the year 2009-10 to 2018-19 show that the share of service sector in GVA in India has increased over the years. Which among the following have driven the maximum increase?",
     "options": [
       "Electricity, gas, water supply and other utility services",
@@ -553,7 +553,7 @@
   },
   {
     "question_number": 60,
-    "year": null,
+    "year": 2021,
     "text": "On the basis of employment conditions, the economy is divided into",
     "options": [
       "organized and unorganized sectors",
@@ -589,7 +589,7 @@
   },
   {
     "question_number": 35,
-    "year": null,
+    "year": 2020,
     "text": "What is meant by MSME ?",
     "options": [
       "Medium, Small and Marginalized Enterprises",
@@ -625,7 +625,7 @@
   },
   {
     "question_number": 59,
-    "year": null,
+    "year": 2020,
     "text": "Which one of the following Central Public Sector Undertakings (CPSUs) is recognized as Miniratnas",
     "options": [
       "Airport Authority of India",
@@ -637,7 +637,7 @@
   },
   {
     "question_number": 61,
-    "year": null,
+    "year": 2020,
     "text": "Which one of the following was recognized as ‘invisible hand’ by Adam Smith ?",
     "options": [
       "Government",
@@ -720,7 +720,7 @@
     "answer": null
   },
   {
-    "question_number": null,
+    "question_number": 61,
     "year": 2019,
     "text": "Who coined the concept of 'Paradox of Thrift'?",
     "options": [
@@ -732,7 +732,7 @@
     "answer": null
   },
   {
-    "question_number": null,
+    "question_number": 60,
     "year": 2019,
     "text": "Which one of the following statements about the production possibility frontier is NOT correct ?",
     "options": [

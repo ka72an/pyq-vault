@@ -2,6 +2,7 @@
   {
     "question_number": 5,
     "subject": "Environment",
+    "year": 2024,
     "exam": "UPSC CAPF",
     "difficulty": "medium",
     "text": "Which one of the following statements with regard to greenhouse effect is correct?",
@@ -17,6 +18,7 @@
   {
     "question_number": 29,
     "subject": "Environment",
+    "year": 2024,
     "exam": "UPSC CAPF",
     "difficulty": "medium",
     "text": "In an ecosystem why is the number of trophic levels of a food chain usually limited?",
@@ -32,6 +34,7 @@
   {
     "question_number": 32,
     "subject": "Environment",
+    "year": 2024,
     "exam": "UPSC CAPF",
     "difficulty": "hard",
     "text": "Which of the following statements regarding faunal resources of India is/are correct? 1. High degree of endemism has been noticed in the biodiversity hotspots of India 2. Of the total biosphere reserves in India, the Sundarbans has the largest number of species and Nokrek has the smallest number of species Select the answer using the codes given below :",
@@ -47,6 +50,7 @@
   {
     "question_number": 7,
     "subject": "Environment",
+    "year": 2024,
     "exam": "UPSC CAPF",
     "difficulty": "medium",
     "text": "Which one of the following statements correctly defines PM1 particles in air?",
@@ -62,6 +66,7 @@
   {
     "question_number": 39,
     "subject": "Environment",
+    "year": 2024,
     "exam": "UPSC CAPF",
     "difficulty": "medium",
     "text": "With reference to 'Black Tigers', which of the following statements is/are correct? 1. They are also referred to as Melanistic Tigers 2. In India they are found only in Similipal Tiger Reserve in Odisha Select the answer using the code given below:",
@@ -77,6 +82,7 @@
   {
     "question_number": 85,
     "subject": "Environment",
+    "year": 2024,
     "exam": "UPSC CAPF",
     "difficulty": "hard",
     "text": "Match List I with List II and select the correct answer using the code given below the Lists: List I (Climate Conference) A. COP-26 B. COP-27 C. COP-28 D. COP-29 List II (Country) 1. Egypt 2. Azerbaijan 3. United Kingdom 4. UAE Code:",
@@ -220,7 +226,7 @@
     "subject": "Environment",
     "chapter": "International Conventions",
     "topic": "Environmental Treaties",
-    "year": null,
+    "year": 2023,
     "exam": "CAPF",
     "difficulty": "medium",
     "text": "'Basel Convention', 'Rotterdam Convention' and 'Stockholm Convention' relate to which of the following?",
@@ -238,7 +244,7 @@
     "subject": "Environment",
     "chapter": "Conservation",
     "topic": "Ramsar Sites in India",
-    "year": null,
+    "year": 2023,
     "exam": "CAPF",
     "difficulty": "hard",
     "text": "Consider the following statements about Ramsar Wetland sites in India : 1. Gahirmatha is the habitat of Olive Ridley Turtles. 2. Chilka lake is the habitat of Irrawaddy Dolphin as its flagship species. 3. Nalsarovar Wetland is also the habitat of Indian Wild Ass (Khur). 4. Tso Moriri Wetland is the habitat and breeding ground of Black-necked Crane. Which of the statements given above are correct?",
