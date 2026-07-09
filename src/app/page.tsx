@@ -54,8 +54,10 @@ export default function Home() {
     const results = questions.filter((q) => {
       if (graphSelectedType === "subject" && q.subject !== graphSelectedNode) return false;
       if (graphSelectedType === "topic" && q.topic !== graphSelectedNode) return false;
-      if (q.subject && excludedSubjects.has(q.subject)) return false;
-      if (q.year && excludedYears.has(q.year)) return false;
+      
+      // NEW ADDITIVE LOGIC: If items are selected, ONLY show questions that match them!
+      if (excludedSubjects.size > 0 && (!q.subject || !excludedSubjects.has(q.subject))) return false;
+      if (excludedYears.size > 0 && (!q.year || !excludedYears.has(q.year))) return false;
 
       const query = searchQuery.trim().toLowerCase();
       if (!query) return true;
@@ -67,19 +69,15 @@ export default function Home() {
       return tokens.every((token) => searchableText.includes(token));
     });
 
-    // NEW: Sort the feed! Year (Newest First) -> Subject (A-Z) -> Question Number (1-125)
+    // Sort the feed: Year (Newest First) -> Question Number (1-125)
     return results.sort((a, b) => {
       const yearA = a.year || 0;
       const yearB = b.year || 0;
-      if (yearA !== yearB) return yearB - yearA; // Newest years at the top
-
-      const subjA = a.subject || "";
-      const subjB = b.subject || "";
-      if (subjA !== subjB) return subjA.localeCompare(subjB); // Group subjects together
+      if (yearA !== yearB) return yearB - yearA; 
 
       const numA = parseInt(String(a.question_number)) || 0;
       const numB = parseInt(String(b.question_number)) || 0;
-      return numA - numB; // Exact numerical order
+      return numA - numB; 
     });
   }, [searchQuery, excludedSubjects, excludedYears, graphSelectedNode, graphSelectedType]);
 
@@ -190,16 +188,16 @@ export default function Home() {
   // NEW: Split the tracked answers into pages of 24 questions each for perfect PDF slicing
   // NEW: Sort the tracked answers for the OMR Sheet
   // Sort priority: Year -> Subject -> Question Number
+  // NEW: Sort the tracked answers for the OMR Sheet
+  // Sort priority: Year (Oldest First) -> Question Number
   const sortedForOMR = [...activityTracker].sort((a, b) => {
     // 1. Sort by Year (Ascending: 2021, 2022, 2023...)
-    const yearA = a.year || 9999; // Questions without years go to the end
+    const yearA = a.year || 9999; 
     const yearB = b.year || 9999;
     if (yearA !== yearB) return yearA - yearB;
 
-    // 2. Sort by Subject alphabetically (e.g., Computer, Geography, Science)
-    if (a.subject !== b.subject) return a.subject.localeCompare(b.subject);
-
-    // 3. Sort by Question Number numerically (1, 2, 3...)
+    // 2. Sort strictly by Question Number numerically (1, 2, 3...)
+    // This perfectly reconstructs the original test paper sequence!
     const numA = parseInt(String(a.qNum)) || 0;
     const numB = parseInt(String(b.qNum)) || 0;
     return numA - numB;
@@ -282,14 +280,14 @@ export default function Home() {
             <div className="bg-neutral-900/80 backdrop-blur-md border border-neutral-800 rounded-xl p-6 space-y-6 shadow-xl">
               {/* ... (Filter toggles code remains same) ... */}
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold text-white">Exclude Specific Data</h2>
+                <h2 className="text-lg font-semibold text-white">Filter Specific Data</h2>
                 <button onClick={() => { setExcludedSubjects(new Set()); setExcludedYears(new Set()); }} className="text-sm text-neutral-500 hover:text-neutral-300">
                   Clear All
                 </button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-sm font-medium text-neutral-400 mb-3 uppercase tracking-wider">Exclude Subjects</h3>
+                  <h3 className="text-sm font-medium text-neutral-400 mb-3 uppercase tracking-wider">Select Subjects</h3>
                   <div className="space-y-2">
                     {availableSubjects.map((subject) => (
                       <label key={subject} className="flex items-center gap-3 cursor-pointer group">
@@ -300,7 +298,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-neutral-400 mb-3 uppercase tracking-wider">Exclude Years</h3>
+                  <h3 className="text-sm font-medium text-neutral-400 mb-3 uppercase tracking-wider">Select Years</h3>
                   <div className="flex flex-wrap gap-2">
                     {availableYears.map((year) => (
                       <label key={year} className="cursor-pointer">
