@@ -6,6 +6,9 @@ import economicsRaw from "./raw_json/economics.json";
 import scienceRaw from "./raw_json/science.json";
 import geographyRaw from "./raw_json/geography.json";
 import mathsRaw from "./raw_json/maths.json";// <-- Cleaned up the name here
+import answerKeyRaw from "./raw_json/answer_key.json";
+
+const answerKey: Record<string, string> = answerKeyRaw;
 
 // Define the shape of your question so TypeScript doesn't yell at you
 export interface Question {
@@ -52,7 +55,7 @@ const mathsQuestions: Question[] = mathsRaw.map((q: any) => ({
 }));
 
 // 3. Export the final, massive combined array
-export const questions: Question[] = [
+const combinedQuestions: Question[] = [
   ...computerQuestions,
   ...environmentQuestions,
   ...polityQuestions,
@@ -61,3 +64,14 @@ export const questions: Question[] = [
   ...geographyQuestions,
   ...mathsQuestions,
 ];
+
+// 4. Inject the correct answers dynamically on export
+export const questions: Question[] = combinedQuestions.map((q) => {
+  const searchKey = `${q.year}_${q.subject}_${q.question_number}`;
+  
+  return {
+    ...q,
+    // It checks the generated answer key first, falls back to the original JSON answer, or leaves it null
+    answer: answerKey[searchKey] || q.answer || null 
+  };
+});

@@ -109,13 +109,40 @@ export default function QuestionCard({ question, onOptionMarked }: QuestionCardP
         {question.text}
       </h2>
 
-      {/* Options Stack - Wrapped in safety check to prevent crash if options are missing */}
+      {/* Options Stack */}
       {question.options && question.options.length > 0 && (
         <div className="space-y-2.5 mb-6">
           {question.options.map((option, idx) => {
             const optionLetter = String.fromCharCode(65 + idx); // A, B, C, D
             const isSelected = selectedOption === idx;
             
+            // NEW: Check if this option matches the correct answer from the database
+            const isCorrectAnswer = question.answer === optionLetter;
+
+            // NEW: Dynamic Styling Logic
+            let buttonStyle = "bg-neutral-900/50 border-neutral-800/60 text-neutral-400 hover:border-neutral-700 hover:text-neutral-200";
+            let badgeStyle = "bg-neutral-800 text-neutral-500 group-hover:text-neutral-400";
+
+            if (revealed) {
+              if (isCorrectAnswer) {
+                // Correct answer always glows green
+                buttonStyle = "bg-green-900/20 border-green-500/50 text-green-100 shadow-md";
+                badgeStyle = "bg-green-500 text-white";
+              } else if (isSelected && !isCorrectAnswer) {
+                // Selected but wrong glows red
+                buttonStyle = "bg-red-900/20 border-red-500/50 text-red-100 shadow-md";
+                badgeStyle = "bg-red-500 text-white";
+              } else {
+                // Dim the unselected, wrong answers so the correct one stands out
+                buttonStyle = "bg-neutral-900/30 border-neutral-800/40 text-neutral-600 opacity-50";
+                badgeStyle = "bg-neutral-800/50 text-neutral-600";
+              }
+            } else if (isSelected) {
+              // Standard selected state (before revealing)
+              buttonStyle = "bg-neutral-800 border-neutral-600 text-white font-medium shadow-md";
+              badgeStyle = "bg-white text-black";
+            }
+
             return (
               <button
                 key={idx}
@@ -126,15 +153,9 @@ export default function QuestionCard({ question, onOptionMarked }: QuestionCardP
                   }
                 }}
                 disabled={revealed}
-                className={`w-full text-left flex items-start gap-4 p-3.5 rounded-xl border transition-all duration-200 text-sm font-normal ${
-                  isSelected 
-                    ? "bg-neutral-800 border-neutral-600 text-white font-medium shadow-md" 
-                    : "bg-neutral-900/50 border-neutral-800/60 text-neutral-400 hover:border-neutral-700 hover:text-neutral-200"
-                }`}
+                className={`w-full text-left flex items-start gap-4 p-3.5 rounded-xl border transition-all duration-200 text-sm font-normal ${buttonStyle}`}
               >
-                <span className={`flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center text-xs font-semibold ${
-                  isSelected ? "bg-white text-black" : "bg-neutral-800 text-neutral-500 group-hover:text-neutral-400"
-                }`}>
+                <span className={`flex-shrink-0 w-6 h-6 rounded-lg flex items-center justify-center text-xs font-semibold transition-colors ${badgeStyle}`}>
                   {optionLetter}
                 </span>
                 <span className="leading-normal pt-0.5">{option}</span>
